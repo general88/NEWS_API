@@ -3,6 +3,7 @@ import { newsBaseURL } from "../utils/helper";
 import axios from "axios";
 import { Button } from "antd";
 import NewsCard from "../components/NewsCard";
+import Marquee from "react-fast-marquee";
 
 // import NewsCard from "./components/NewsCard";
 
@@ -10,7 +11,7 @@ const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 
 function NewsList({ category }) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  //   const [loading, setLoading] = useState(true);
 
   const getNews = async () => {
     const options = {
@@ -32,10 +33,10 @@ function NewsList({ category }) {
     try {
       const response = await axios.get(`${newsBaseURL}/category`, options);
       setData(response.data);
-      setLoading(false);
+      //   setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      //   setLoading(false);
     }
   };
 
@@ -43,20 +44,25 @@ function NewsList({ category }) {
     getNews();
   }, []);
 
-  if (loading) {
-    return <div className="loader"></div>;
-  }
+  //   if (loading) {
+  //     return <div className="loader"></div>;
+  //   }
   console.log(data);
   return (
-    <>
-      <div className="App">
-        {data.map((item) => (
+    <div className="max-w-6xl mx-auto">
+      <Marquee>
+        News Headline:
+        {data?.map((item) => (
+          <p className="uppercase font-semibold">-- {item.title} --</p>
+        ))}
+      </Marquee>
+      <h1 className="capitalize">Trending {category} news</h1>
+      <div className="grid grid-cols-4 gap-4">
+        {data?.map((item) => (
           <NewsCard {...item} />
         ))}
-
-        <Button type="primary">Button</Button>
       </div>
-    </>
+    </div>
   );
 }
 
